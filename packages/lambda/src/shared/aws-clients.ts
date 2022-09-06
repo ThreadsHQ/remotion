@@ -24,7 +24,11 @@ const _clients: Partial<
 	>
 > = {};
 
-type CredentialPair = {accessKeyId: string; secretAccessKey: string};
+type CredentialPair = {
+	accessKeyId: string;
+	secretAccessKey: string;
+	sessionToken?: string;
+};
 
 const getCredentials = (): CredentialPair | undefined => {
 	if (isInsideLambda()) {
@@ -45,6 +49,7 @@ const getCredentials = (): CredentialPair | undefined => {
 		return {
 			accessKeyId: process.env.AWS_ACCESS_KEY_ID as string,
 			secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY as string,
+			sessionToken: process.env.AWS_SESSION_TOKEN as string | undefined,
 		};
 	}
 
