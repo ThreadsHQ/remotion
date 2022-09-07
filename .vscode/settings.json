@@ -3,5 +3,9 @@
   "editor.codeActionsOnSave": {
     "source.organizeImports": false,
     "source.fixAll": true
+  },
+  "files.exclude": {
+    "**/dist": true,
+    "**/node_modules": true
   }
 }

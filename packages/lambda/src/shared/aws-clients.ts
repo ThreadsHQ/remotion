@@ -3,6 +3,7 @@ import {IAMClient} from '@aws-sdk/client-iam';
 import {LambdaClient} from '@aws-sdk/client-lambda';
 import {S3Client} from '@aws-sdk/client-s3';
 import {ServiceQuotasClient} from '@aws-sdk/client-service-quotas';
+import {STSClient} from '@aws-sdk/client-sts';
 import type {AwsRegion} from '../pricing/aws-regions';
 import {checkCredentials} from './check-credentials';
 import {isInsideLambda} from './is-in-lambda';
@@ -19,6 +20,7 @@ const _clients: Partial<
 				| S3Client
 				| IAMClient
 				| ServiceQuotasClient
+				| STSClient
 			>
 		>
 	>
@@ -64,6 +66,7 @@ export type ServiceMapping = {
 	iam: IAMClient;
 	lambda: LambdaClient;
 	servicequotas: ServiceQuotasClient;
+	sts: STSClient;
 };
 
 export const getServiceClient = <T extends keyof ServiceMapping>(
@@ -93,6 +96,10 @@ export const getServiceClient = <T extends keyof ServiceMapping>(
 
 		if (service === 'servicequotas') {
 			return ServiceQuotasClient;
+		}
+
+		if (service === 'sts') {
+			return STSClient;
 		}
 	})();
 
@@ -134,6 +141,10 @@ export const getLambdaClient = (region: AwsRegion): LambdaClient => {
 
 export const getIamClient = (region: AwsRegion): IAMClient => {
 	return getServiceClient(region, 'iam');
+};
+
+export const getStsClient = (region: AwsRegion): STSClient => {
+	return getServiceClient(region, 'sts');
 };
 
 export const getServiceQuotasClient = (
